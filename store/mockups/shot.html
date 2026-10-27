@@ -1,0 +1,203 @@
+<!doctype html>
+<!-- Store image generator. Serve the project root over HTTP and open:
+     /store/mockups/shot.html?scene=how|settings|tile&lang=en|es
+     The popup on the right is the real popup/popup.html with a stubbed chrome API. -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Store image</title>
+    <style>
+      :root {
+        --accent: #5b4bd6;
+        --accent-soft: #ece9ff;
+        --fg: #1d1b26;
+        --muted: #6b6878;
+        --card: #ffffff;
+        --line: #e2e0ea;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; }
+      body {
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color: var(--fg);
+        background: linear-gradient(135deg, #f6f4ff 0%, #e9e5ff 100%);
+        overflow: hidden;
+      }
+      .canvas { position: relative; width: 1280px; height: 800px; display: flex; align-items: center; padding: 0 72px; gap: 48px; }
+      .copy { flex: 1; }
+      .brand { display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 22px; color: var(--accent); margin-bottom: 28px; }
+      .brand img { width: 48px; height: 48px; }
+      h1 { font-size: 46px; line-height: 1.1; margin: 0 0 22px; letter-spacing: -0.02em; }
+      .sub { font-size: 22px; line-height: 1.45; color: var(--muted); margin: 0; max-width: 560px; }
+      ul.points { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; }
+      ul.points li { font-size: 21px; display: flex; gap: 12px; align-items: baseline; }
+      ul.points li::before { content: '✓'; color: var(--accent); font-weight: 800; }
+
+      .stage { position: relative; width: 620px; height: 560px; }
+      .tab { position: absolute; background: var(--card); border-radius: 18px; box-shadow: 0 12px 40px rgba(60, 40, 160, 0.14); padding: 22px 24px; width: 340px; }
+      .tab .label { font-size: 15px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
+      .music { top: 60px; left: 0; }
+      .voice { top: 220px; left: 0; }
+      .meter { display: flex; align-items: center; gap: 14px; font-size: 18px; font-weight: 600; }
+      .meter .bar { flex: 1; height: 12px; border-radius: 6px; background: var(--line); overflow: hidden; }
+      .meter .fill { height: 100%; width: 10%; background: var(--accent); border-radius: 6px; }
+      .meter .was { color: var(--muted); font-weight: 400; text-decoration: line-through; }
+      .bubble { display: flex; align-items: center; gap: 14px; background: var(--accent-soft); border-radius: 14px; padding: 12px 16px; }
+      .play { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; color: #fff; font-size: 15px; }
+      .wave { flex: 1; display: flex; align-items: center; gap: 3px; height: 36px; }
+      .wave span { flex: 1; background: var(--accent); border-radius: 2px; opacity: 0.85; }
+      .time { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+      /* Chat-style voice message (generic, no third-party logos). */
+      .voice { padding: 22px 24px 26px; }
+      .chat { background: #efeae2; border-radius: 12px; padding: 16px 14px; }
+      .msg { position: relative; background: #fff; border-radius: 0 10px 10px 10px; padding: 9px 12px 7px 9px; box-shadow: 0 1px 1px rgba(11, 20, 26, 0.13); margin-left: 8px; }
+      .msg::before { content: ''; position: absolute; top: 0; left: -8px; border-top: 10px solid #fff; border-left: 8px solid transparent; }
+      .msg-row { display: flex; align-items: center; gap: 10px; }
+      .avatar { position: relative; flex: none; width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(160deg, #c9d3db, #9aa8b3); }
+      .avatar::after { content: ''; position: absolute; left: 13px; top: 9px; width: 20px; height: 20px; border-radius: 50%; background: #e9eef2; box-shadow: 0 22px 0 6px #e9eef2; clip-path: circle(60% at 50% 50%); }
+      .avatar .mic { position: absolute; right: -3px; bottom: -2px; width: 19px; height: 19px; border-radius: 50%; background: #fff; display: grid; place-items: center; z-index: 1; }
+      .avatar .mic svg { width: 13px; height: 13px; fill: #00a884; }
+      .pause { flex: none; width: 26px; height: 26px; display: grid; place-items: center; }
+      .pause svg { width: 22px; height: 22px; fill: #8696a0; }
+      .track { position: relative; flex: 1; display: flex; align-items: center; gap: 2px; height: 30px; }
+      .track span { flex: 1; min-width: 2px; border-radius: 2px; background: #c8cfd4; }
+      .track span.played { background: #00a884; }
+      .track .dot { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: #00a884; }
+      .msg-meta { display: flex; justify-content: space-between; padding: 3px 0 0 82px; font-size: 11.5px; color: #667781; font-variant-numeric: tabular-nums; }
+      .popup-wrap { position: absolute; right: 0; bottom: 0; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(40, 20, 120, 0.25); transform-origin: bottom right; }
+      .popup-wrap iframe { display: block; border: 0; width: 300px; }
+
+      .settings .stage { width: 560px; height: 640px; display: grid; place-items: center; }
+      .settings .popup-wrap { position: static; transform: scale(1.45); transform-origin: center; }
+
+      .tile .canvas { width: 440px; height: 280px; padding: 0 30px; gap: 0; justify-content: center; text-align: center; flex-direction: column; }
+      .tile .brand { flex-direction: column; font-size: 28px; color: var(--fg); margin: 0 0 12px; }
+      .tile .brand img { width: 88px; height: 88px; }
+      .tile .sub { font-size: 17px; max-width: none; }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="canvas"></div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const scene = params.get('scene') || 'how';
+      const lang = params.get('lang') || 'en';
+      document.body.classList.add(scene);
+      document.documentElement.lang = lang;
+
+      const COPY = {
+        en: {
+          howTitle: 'Hear every voice note over your music',
+          howSub: 'When a voice note plays, the music in your other tabs fades down on its own, then returns to its exact volume.',
+          musicTab: 'Music tab',
+          voiceTab: 'Voice note',
+          settingsTitle: 'You choose how low, and where',
+          points: [
+            'Works with WhatsApp Web, Telegram, Slack and Discord',
+            'Music level from 0 to 50%',
+            'Smooth fades, back to the exact volume',
+            'Notification sounds are ignored',
+            '100% local: no account, no data sent',
+          ],
+          tileSub: 'Lowers the music when a voice note plays',
+        },
+        es: {
+          howTitle: 'Escucha cada nota de voz sin quitar la música',
+          howSub: 'Cuando suena una nota de voz, la música de tus otras pestañas baja sola y luego vuelve a su volumen exacto.',
+          musicTab: 'Pestaña de música',
+          voiceTab: 'Nota de voz',
+          settingsTitle: 'Tú decides cuánto baja y en qué webs',
+          points: [
+            'Funciona con WhatsApp Web, Telegram, Slack y Discord',
+            'Volumen de la música de 0 a 50 %',
+            'Fundidos suaves y vuelta al volumen exacto',
+            'Ignora los sonidos de aviso',
+            '100 % local: sin cuentas ni datos enviados',
+          ],
+          tileSub: 'Baja la música cuando suena una nota de voz',
+        },
+      }[lang];
+
+      const brand = `<div class="brand"><img src="/icons/icon128.png" alt="" />Voice Note Ducker</div>`;
+      // Voice message mid-playback: the played part is green, with the progress dot.
+      const BARS = 30;
+      const PLAYED = 11;
+      const waveBars = Array.from({ length: BARS }, (_, i) => {
+        const h = 18 + Math.round(72 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.45)));
+        return `<span class="${i < PLAYED ? 'played' : ''}" style="height:${h}%"></span>`;
+      }).join('');
+      const voiceMessage = `
+        <div class="chat"><div class="msg">
+          <div class="msg-row">
+            <div class="avatar"><div class="mic"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1A7 7 0 0 0 19 12h-2z"/></svg></div></div>
+            <div class="pause"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg></div>
+            <div class="track">${waveBars}<div class="dot" style="left:${(PLAYED / BARS) * 100}%"></div></div>
+          </div>
+          <div class="msg-meta"><span>0:12</span><span>10:42</span></div>
+        </div></div>`;
+
+      const canvas = document.getElementById('canvas');
+      if (scene === 'tile') {
+        canvas.innerHTML = `${brand}<p class="sub">${COPY.tileSub}</p>`;
+      } else if (scene === 'settings') {
+        canvas.innerHTML = `
+          <div class="copy">${brand}<h1>${COPY.settingsTitle}</h1>
+            <ul class="points">${COPY.points.map((p) => `<li>${p}</li>`).join('')}</ul></div>
+          <div class="stage"><div class="popup-wrap"><iframe id="popup" scrolling="no"></iframe></div></div>`;
+      } else {
+        canvas.innerHTML = `
+          <div class="copy">${brand}<h1>${COPY.howTitle}</h1><p class="sub">${COPY.howSub}</p></div>
+          <div class="stage">
+            <div class="tab music"><div class="label">♪ ${COPY.musicTab}</div>
+              <div class="meter"><span>🔉</span><div class="bar"><div class="fill"></div></div><span>10%</span><span class="was">100%</span></div></div>
+            <div class="tab voice"><div class="label">🎙 ${COPY.voiceTab}</div>
+              ${voiceMessage}</div>
+            <div class="popup-wrap" style="transform: scale(0.92)"><iframe id="popup" scrolling="no"></iframe></div>
+          </div>`;
+      }
+
+      // Load the real popup into the iframe with a fake chrome API.
+      async function loadPopup(frame) {
+        const [html, messages] = await Promise.all([
+          fetch('/popup/popup.html').then((r) => r.text()),
+          fetch(`/_locales/${lang}/messages.json`).then((r) => r.json()),
+        ]);
+        const stub = `<script>
+          const MESSAGES = ${JSON.stringify(messages)};
+          window.chrome = {
+            i18n: {
+              getUILanguage: () => ${JSON.stringify(lang)},
+              getMessage(key, subs = []) {
+                const entry = MESSAGES[key];
+                if (!entry) return '';
+                return entry.message.replace(/\\$(\\w+)\\$/g, (_, name) => {
+                  const content = entry.placeholders?.[name.toLowerCase()]?.content || '';
+                  return content.replace(/\\$(\\d)/g, (_m, n) => subs[n - 1] ?? '');
+                });
+              },
+            },
+            storage: {
+              sync: { get: async (defaults) => ({ ...defaults }), set: async () => {} },
+              session: { get: async () => ({ duckState: { applied: true } }) },
+              onChanged: { addListener() {} },
+            },
+          };
+        <\/script>`;
+        frame.srcdoc = html
+          .replace('<head>', '<head><base href="/popup/" /><style>html, body { overflow: hidden; }</style>')
+          .replace('<script src="../shared/defaults.js">', `${stub}<script src="../shared/defaults.js">`);
+        await new Promise((resolve) => (frame.onload = resolve));
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        // Follow the content, like the real popup does when sites are added or removed.
+        const body = frame.contentDocument.body;
+        const fit = () => (frame.style.height = `${Math.ceil(body.getBoundingClientRect().height) + 2}px`);
+        new ResizeObserver(fit).observe(body);
+        fit();
+      }
+
+      const frame = document.getElementById('popup');
+      window.ready = frame ? loadPopup(frame).then(() => true) : Promise.resolve(true);
+    </script>
+  </body>
+</html>

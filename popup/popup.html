@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Voice Note Ducker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1 data-i18n="appName">Voice Note Ducker</h1>
+      <label class="switch">
+        <input type="checkbox" id="enabled" />
+        <span data-i18n="enabled">Enabled</span>
+      </label>
+    </header>
+
+    <p id="status" class="status"></p>
+
+    <section>
+      <label for="level" class="row">
+        <span data-i18n="levelLabel">Music level during voice notes</span>
+        <output id="levelValue" for="level"></output>
+      </label>
+      <input type="range" id="level" min="0" max="50" step="1" />
+    </section>
+
+    <section>
+      <h2 data-i18n="sitesTitle">Voice note sites</h2>
+      <ul id="sites"></ul>
+      <form id="addForm" class="row">
+        <input id="newSite" type="text" placeholder="example.com" autocomplete="off" spellcheck="false" />
+        <button type="submit" data-i18n="addSite">Add</button>
+      </form>
+      <p id="error" class="error" hidden></p>
+      <p class="hint" data-i18n="sitesHint"></p>
+      <button id="reset" type="button" class="link" data-i18n="resetSites">Reset sites to defaults</button>
+    </section>
+
+    <footer>
+      <a id="credit" class="link" target="_blank" rel="noopener noreferrer"></a>
+      <a id="donate" class="link" target="_blank" rel="noopener noreferrer" data-i18n="donate" hidden></a>
+    </footer>
+
+    <script src="../shared/defaults.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

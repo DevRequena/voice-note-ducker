@@ -1,0 +1,56 @@
+{
+  "appName": {
+    "message": "Voice Note Ducker"
+  },
+  "appDescription": {
+    "message": "Baja la música de tus otras pestañas mientras suena una nota de voz y la recupera al terminar. 100 % local, sin recoger datos."
+  },
+  "enabled": {
+    "message": "Activada"
+  },
+  "statusActive": {
+    "message": "Bajando las otras pestañas"
+  },
+  "statusIdle": {
+    "message": "En espera"
+  },
+  "levelLabel": {
+    "message": "Volumen de la música durante las notas"
+  },
+  "sitesTitle": {
+    "message": "Webs de notas de voz"
+  },
+  "addSite": {
+    "message": "Añadir"
+  },
+  "siteError": {
+    "message": "Escribe una dirección como ejemplo.com"
+  },
+  "sitesHint": {
+    "message": "El audio que suena en estas webs (y sus subdominios) cuenta como nota de voz."
+  },
+  "resetSites": {
+    "message": "Restablecer las webs por defecto"
+  },
+  "removeSite": {
+    "message": "Quitar $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "discord.com"
+      }
+    }
+  },
+  "donate": {
+    "message": "Apoya este proyecto ♥"
+  },
+  "madeBy": {
+    "message": "Hecho por $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "DevCesar"
+      }
+    }
+  }
+}

@@ -1,0 +1,155 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1d1b26;
+  --muted: #6b6878;
+  --border: #e2e0ea;
+  --accent: #5b4bd6;
+  --danger: #c53030;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1b22;
+    --fg: #ecebf2;
+    --muted: #a19fae;
+    --border: #36343f;
+    --accent: #8f83ff;
+    --danger: #ff7a7a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 300px;
+  margin: 0;
+  padding: 14px;
+  font: 13px/1.4 system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+header,
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 15px;
+}
+
+h2 {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+
+section {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.status {
+  margin: 6px 0 10px;
+  color: var(--muted);
+}
+
+.status.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+input[type='checkbox'] {
+  accent-color: var(--accent);
+}
+
+input[type='text'] {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+ul {
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+
+li button {
+  padding: 0 7px;
+  border: none;
+  color: var(--muted);
+}
+
+li button:hover {
+  color: var(--danger);
+}
+
+.hint {
+  margin: 8px 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.error {
+  margin: 6px 0 0;
+  color: var(--danger);
+  font-size: 12px;
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+}
+
+a.link {
+  text-decoration: none;
+}
+
+.link {
+  padding: 0;
+  border: none;
+  color: var(--accent);
+}

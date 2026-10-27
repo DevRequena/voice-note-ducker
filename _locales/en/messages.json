@@ -1,0 +1,56 @@
+{
+  "appName": {
+    "message": "Voice Note Ducker"
+  },
+  "appDescription": {
+    "message": "Lowers the music in your other tabs while a voice note plays, then brings it back. 100% local, no data collected."
+  },
+  "enabled": {
+    "message": "Enabled"
+  },
+  "statusActive": {
+    "message": "Lowering other tabs now"
+  },
+  "statusIdle": {
+    "message": "Idle"
+  },
+  "levelLabel": {
+    "message": "Music level during voice notes"
+  },
+  "sitesTitle": {
+    "message": "Voice note sites"
+  },
+  "addSite": {
+    "message": "Add"
+  },
+  "siteError": {
+    "message": "Enter a host name like example.com"
+  },
+  "sitesHint": {
+    "message": "Audio that plays on these sites (and their subdomains) counts as a voice note."
+  },
+  "resetSites": {
+    "message": "Reset sites to defaults"
+  },
+  "removeSite": {
+    "message": "Remove $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "discord.com"
+      }
+    }
+  },
+  "donate": {
+    "message": "Support this project ♥"
+  },
+  "madeBy": {
+    "message": "Made by $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "DevCesar"
+      }
+    }
+  }
+}
