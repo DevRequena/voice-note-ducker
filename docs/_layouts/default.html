@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title }} · Voice Note Ducker</title>
+    <link rel="icon" href="{{ '/images/logo.png' | relative_url }}" />
+    <link rel="stylesheet" href="{{ '/site.css' | relative_url }}" />
+  </head>
+  <body>
+    <header class="nav">
+      <a class="brand" href="{{ '/' | relative_url }}"><img src="{{ '/images/logo.png' | relative_url }}" alt="" />Voice Note Ducker</a>
+    </header>
+    <main class="doc">
+      {{ content }}
+    </main>
+    <footer class="footer">
+      <span>Made by · Hecho por <a href="https://www.linkedin.com/in/devrequena-developer/">DevCesar</a></span>
+      <nav>
+        <a href="{{ '/' | relative_url }}">Home · Inicio</a>
+        <a href="https://github.com/DevRequena/voice-note-ducker">GitHub</a>
+      </nav>
+    </footer>
+  </body>
+</html>

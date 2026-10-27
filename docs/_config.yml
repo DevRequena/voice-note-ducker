@@ -1,3 +1,7 @@
 title: Voice Note Ducker
 description: Lowers the music in your other tabs while a voice note plays. 100% local.
-theme: jekyll-theme-minimal
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
