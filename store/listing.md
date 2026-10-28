@@ -87,9 +87,10 @@ Productivity / Productividad
 | `en-1-how-1280x800.png`, `en-2-settings-1280x800.png` | Screenshots, English listing |
 | `es-1-how-1280x800.png`, `es-2-settings-1280x800.png` | Screenshots, Spanish listing |
 | `en-promo-440x280.png` / `es-promo-440x280.png` | Small promo tile |
+| `en-promo-1400x560.png` / `es-promo-1400x560.png` | Large promo tile (Edge) / marquee |
 | `logo-300x300.png` | Edge store logo |
 | `../../icons/icon128.png` | Chrome store icon |
 
 To regenerate the screenshots, serve the project root (`python3 -m http.server 8765`) and open
 `http://127.0.0.1:8765/store/mockups/shot.html?scene=how|settings|tile&lang=en|es` at 1280×800
-(440×280 for `tile`).
+(440×280 for `tile`, 1400×560 for `large`).

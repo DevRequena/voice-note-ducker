@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- Store image generator. Serve the project root over HTTP and open:
-     /store/mockups/shot.html?scene=how|settings|tile&lang=en|es
+     /store/mockups/shot.html?scene=how|settings|tile|large&lang=en|es
      The popup on the right is the real popup/popup.html with a stubbed chrome API. -->
 <html>
   <head>
@@ -70,6 +70,11 @@
 
       .settings .stage { width: 560px; height: 640px; display: grid; place-items: center; }
       .settings .popup-wrap { position: static; transform: scale(1.45); transform-origin: center; }
+
+      .large .canvas { width: 1400px; height: 560px; padding: 0 64px 0 96px; gap: 24px; }
+      .large h1 { font-size: 46px; }
+      .large .sub { font-size: 21px; max-width: 520px; }
+      .large .stage { flex: none; transform: scale(0.86); transform-origin: right center; }
 
       .tile .canvas { width: 440px; height: 280px; padding: 0 30px; gap: 0; justify-content: center; text-align: center; flex-direction: column; }
       .tile .brand { flex-direction: column; font-size: 28px; color: var(--fg); margin: 0 0 12px; }
@@ -146,8 +151,9 @@
             <ul class="points">${COPY.points.map((p) => `<li>${p}</li>`).join('')}</ul></div>
           <div class="stage"><div class="popup-wrap"><iframe id="popup" scrolling="no"></iframe></div></div>`;
       } else {
+        const sub = scene === 'large' ? COPY.tileSub : COPY.howSub;
         canvas.innerHTML = `
-          <div class="copy">${brand}<h1>${COPY.howTitle}</h1><p class="sub">${COPY.howSub}</p></div>
+          <div class="copy">${brand}<h1>${COPY.howTitle}</h1><p class="sub">${sub}</p></div>
           <div class="stage">
             <div class="tab music"><div class="label">♪ ${COPY.musicTab}</div>
               <div class="meter"><span>🔉</span><div class="bar"><div class="fill"></div></div><span>10%</span><span class="was">100%</span></div></div>
